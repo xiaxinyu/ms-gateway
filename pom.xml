@@ -9,13 +9,14 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>gateway-server</module>
+        <module>gateway-sentinel</module>
     </modules>
     <packaging>pom</packaging>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spring-boot-version>2.1.6.RELEASE</spring-boot-version>
-        <spring-cloud-version>Greenwich.RELEASE</spring-cloud-version>
+        <spring-boot-version>2.3.2.RELEASE</spring-boot-version>
+        <spring-cloud-version>Hoxton.SR8</spring-cloud-version>
         <commons-codec-version>1.10</commons-codec-version>
         <lombok-version>1.18.8</lombok-version>
         <swagger-version>2.6.1</swagger-version>

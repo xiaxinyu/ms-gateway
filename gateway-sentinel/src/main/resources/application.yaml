@@ -1,0 +1,61 @@
+server:
+  port: 8764
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    name: gateway-sentinel
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+  cloud:
+    sentinel:
+      transport:
+        client-ip: 192.168.2.119
+        dashboard: localhost:8858
+      eager: true
+    gateway:
+      enabled: true
+      discovery:
+        locator:
+          lower-case-service-id: true
+      routes:
+        # Add your routes here.
+        - id: foo-service-route
+          uri: http://localhost:9669/
+          predicates:
+            - Path=/demo/**
+        - id: httpbin-route
+          uri: https://httpbin.org
+          predicates:
+            - Path=/httpbin/**
+          filters:
+            - RewritePath=/httpbin/(?<segment>.*), /$\{segment}
+
+eureka:
+  instance:
+    preferIpAddress: true
+    leaseRenewalIntervalInSeconds: 10
+    leaseExpirationDurationInSeconds: 30
+    metadata-map:
+      VERSION: v1
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+    registryFetchIntervalSeconds: 10
+    disable-delta: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+logging:
+  level:
+    com:
+      alibaba: debug
+    org:
+      springframework: info
