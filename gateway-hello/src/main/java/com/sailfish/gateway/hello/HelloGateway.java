@@ -1,4 +1,4 @@
-package com.sailfish.gateway;
+package com.sailfish.gateway.hello;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -10,8 +10,8 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
  */
 @EnableEurekaClient
 @SpringBootApplication
-public class ApplicationGateway {
+public class HelloGateway {
     public static void main(String[] args) {
-        SpringApplication.run(ApplicationGateway.class, args);
+        SpringApplication.run(HelloGateway.class, args);
     }
 }

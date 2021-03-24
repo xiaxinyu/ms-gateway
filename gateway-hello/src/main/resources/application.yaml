@@ -1,29 +1,15 @@
 server:
-  port: 8764
+  port: 8555
 
 spring:
   main:
     allow-bean-definition-overriding: true
   application:
-    name: gateway-sentinel
+    name: hello
   servlet:
     multipart:
       max-file-size: 50MB
       max-request-size: 50MB
-  cloud:
-    gateway:
-      enabled: true
-      discovery:
-        locator:
-          enabled: true
-          lowerCaseServiceId: true
-      routes:
-        - id:  hello
-          uri: lb://hello
-          predicates:
-            - Path=/hello/**
-          filters:
-            - StripPrefix=1
 
 eureka:
   instance:
@@ -43,10 +29,3 @@ management:
     web:
       exposure:
         include: '*'
-
-logging:
-  level:
-    com:
-      alibaba: debug
-    org:
-      springframework: info

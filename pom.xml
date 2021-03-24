@@ -10,6 +10,7 @@
     <modules>
         <module>gateway-server</module>
         <module>gateway-sentinel</module>
+        <module>gateway-hello</module>
     </modules>
     <packaging>pom</packaging>
 
