@@ -1,11 +1,11 @@
 server:
-  port: 8555
+  port: 8989
 
 spring:
   main:
     allow-bean-definition-overriding: true
   application:
-    name: steamiam
+    name: testa
   servlet:
     multipart:
       max-file-size: 50MB

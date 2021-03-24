@@ -1,4 +1,4 @@
-package com.sailfish.gateway.hello;
+package com.sailfish.gateway;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;

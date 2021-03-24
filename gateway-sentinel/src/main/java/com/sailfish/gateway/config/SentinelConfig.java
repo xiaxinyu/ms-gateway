@@ -1,9 +1,10 @@
 package com.sailfish.gateway.config;
 
+import com.alibaba.csp.sentinel.adapter.gateway.common.SentinelGatewayConstants;
 import com.alibaba.csp.sentinel.adapter.gateway.common.rule.GatewayFlowRule;
 import com.alibaba.csp.sentinel.adapter.gateway.common.rule.GatewayRuleManager;
 import com.alibaba.csp.sentinel.adapter.gateway.sc.SentinelGatewayFilter;
-import com.google.common.collect.Lists;
+import com.alibaba.csp.sentinel.slots.block.RuleConstant;
 import com.sailfish.gateway.handler.JsonExceptionHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.util.Strings;
@@ -88,30 +89,33 @@ public class SentinelConfig {
             log.info("限流配置：serviceName={}", t);
             GatewayFlowRule gatewayFlowRule = new GatewayFlowRule();
             // 服务
-            gatewayFlowRule.setResource(t);
+            gatewayFlowRule.setResource(t.trim());
+            gatewayFlowRule.setResourceMode(SentinelGatewayConstants.RESOURCE_MODE_ROUTE_ID);
             // QPS
-            gatewayFlowRule.setCount(1);
+            gatewayFlowRule.setCount(5);
+            gatewayFlowRule.setGrade(RuleConstant.FLOW_GRADE_QPS);
             // 每秒
             gatewayFlowRule.setIntervalSec(intervalSec);
             flowRules.add(gatewayFlowRule);
         });
+        log.info("限流配置：size={}", flowRules.size());
         GatewayRuleManager.loadRules(flowRules);
     }
 
     private List<String> getSteamAllServiceNames() {
-        Flux<RouteDefinition> ymlRouteDefinitionFlux = propertiesRouteDefinitionLocator.getRouteDefinitions();
+        //Flux<RouteDefinition> ymlRouteDefinitionFlux = propertiesRouteDefinitionLocator.getRouteDefinitions();
         Flux<RouteDefinition> routeDefinitionFlux = discoveryClientRouteDefinitionLocator.getRouteDefinitions();
-        Iterable<RouteDefinition> ymlRoutes = ymlRouteDefinitionFlux.toIterable();
+        //Iterable<RouteDefinition> ymlRoutes = ymlRouteDefinitionFlux.toIterable();
         Iterable<RouteDefinition> discoveryRoutes = routeDefinitionFlux.toIterable();
 
-        ArrayList<String> serviceNames = Lists.newArrayList();
-        for (RouteDefinition route : ymlRoutes) {
-            String serviceName = getServiceName(route.getId());
-            serviceNames.add(serviceName);
-        }
+        ArrayList<String> serviceNames = new ArrayList<>();
+//        for (RouteDefinition route : ymlRoutes) {
+//            String serviceName = getServiceName(route.getId());
+//            serviceNames.add(serviceName);
+//        }
 
         for (RouteDefinition route : discoveryRoutes) {
-            String serviceName = getServiceName(route.getId());
+            String serviceName = route.getId();
             serviceNames.add(serviceName);
         }
         return serviceNames;

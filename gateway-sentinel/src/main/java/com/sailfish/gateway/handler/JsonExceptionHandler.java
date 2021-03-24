@@ -1,5 +1,6 @@
 package com.sailfish.gateway.handler;
 
+import com.alibaba.csp.sentinel.slots.block.flow.FlowException;
 import com.alibaba.csp.sentinel.slots.block.flow.param.ParamFlowException;
 import com.sailfish.gateway.constant.RequestConstants;
 import com.sailfish.gateway.exception.GatewayException;
@@ -92,9 +93,12 @@ public class JsonExceptionHandler implements ErrorWebExceptionHandler {
         } else if (ex instanceof GatewayException) {
             GatewayException appEx = (GatewayException) ex;
             errorMsg = appEx.getMessage();
+        } else if (ex instanceof FlowException) {
+            httpStatus = HttpStatus.TOO_MANY_REQUESTS;
+            errorMsg = "error.gateway.limit";
         } else if (ex instanceof ParamFlowException) {
             httpStatus = HttpStatus.TOO_MANY_REQUESTS;
-            code = "error.gateway.limit";
+            errorMsg = "error.gateway.limit";
         } else {
             httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
         }
@@ -107,7 +111,7 @@ public class JsonExceptionHandler implements ErrorWebExceptionHandler {
         //错误记录
         ServerHttpRequest request = exchange.getRequest();
 
-        log.error("[全局异常处理]异常请求路径: {}, 记录异常信息: {}", request.getPath(), ex.getMessage(), ex);
+        log.error("[全局异常处理]异常请求路径: {}, 记录异常信息: {}", request.getPath(), errorMsg, ex);
         if (exchange.getResponse().isCommitted()) {
             return Mono.error(ex);
         }

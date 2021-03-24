@@ -1,5 +1,5 @@
 server:
-  port: 8764
+  port: 8765
 
 spring:
   main:
@@ -11,6 +11,14 @@ spring:
       max-file-size: 50MB
       max-request-size: 50MB
   cloud:
+    sentinel:
+      filter:
+        enabled: true
+      transport:
+        port: 8766
+        client-ip: 10.54.9.24
+        dashboard: localhost:8858
+      eager: true
     gateway:
       enabled: true
       discovery:
@@ -18,10 +26,10 @@ spring:
           enabled: true
           lowerCaseServiceId: true
       routes:
-        - id:  hello
-          uri: lb://hello
+        - id: testa
+          uri: lb://testa
           predicates:
-            - Path=/hello/**
+            - Path=/testa/**
           filters:
             - StripPrefix=1
 
@@ -50,3 +58,17 @@ logging:
       alibaba: debug
     org:
       springframework: info
+
+
+ribbon:
+  ReadTimeout: 20000
+  ConnectTimeout: 20000
+  MaxAutoRetries: 1
+  httpclient:
+    enabled: false
+  okhttp:
+    enabled: true
+
+feign:
+  sentinel:
+    enabled: true
